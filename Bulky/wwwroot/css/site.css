@@ -546,3 +546,13 @@ bg-success {
         background-color: #578553;
         border-color: #578553;
     }
+
+.fa-star {
+    font-size: 20px;
+    color: gray;
+    cursor: pointer;
+}
+
+    .fa-star.checked {
+        color: gold;
+    }

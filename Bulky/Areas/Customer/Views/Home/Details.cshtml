@@ -1,4 +1,15 @@
 ﻿@model ShoppingCart
+<style>
+    .fa-star {
+        font-size: 20px;
+        color: gray;
+        cursor: pointer;
+    }
+
+        .fa-star.checked {
+            color: gold;
+        }
+</style>
 
 <form method="post">
     <div class="card shadow border-0 mt-4 mb-4">
@@ -69,6 +80,33 @@
                         </div>
                         <div class="row pl-2 my-3">
                             <p class="text-secondary lh-sm">@Html.Raw(Model.Product.Description)</p>
+                            <hr />
+                            <div class="row pl-2 my-3">
+                                <h5 class="fw-semibold">Leave a Review:</h5>
+                                <div class="mb-2">
+                                    <div class="star-rating">
+                                        <span class="fa fa-star" data-value="1"></span>
+                                        <span class="fa fa-star" data-value="2"></span>
+                                        <span class="fa fa-star" data-value="3"></span>
+                                        <span class="fa fa-star" data-value="4"></span>
+                                        <span class="fa fa-star" data-value="5"></span>
+                                    </div>
+                                    <input type="hidden" name="Rating" id="Rating" />
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="Comment" class="form-label">Comment:</label>
+                                    <textarea name="Comment" id="Comment" class="form-control" rows="3"></textarea>
+                                </div>
+
+                                <div class="col-12 col-md-6 pb-1">
+                                    <button type="submit" formaction="/Product/SubmitReview"
+                                            class="btn btn-outline-success w-100 py-2 text-uppercase fw-semibold">
+                                        Submit Review
+                                    </button>
+                                </div>
+                            </div>
+
                         </div>
                         <div class="row pl-2 mb-3">
                             <div class="col-md-4">
@@ -98,3 +136,32 @@
         </div>
     </div>
 </form>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const stars = document.querySelectorAll(".star-rating .fa");
+            const ratingInput = document.getElementById("Rating");
+
+            stars.forEach(star => {
+                star.addEventListener("click", function () {
+                    const value = this.getAttribute("data-value");
+                    ratingInput.value = value;
+
+                    stars.forEach(s => s.classList.remove("checked"));
+
+                    let reached = false;
+                    stars.forEach(s => {
+                        if (!reached) {
+                            s.classList.add("checked");
+                        }
+                        if (s === this) {
+                            reached = true;
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+
+}
