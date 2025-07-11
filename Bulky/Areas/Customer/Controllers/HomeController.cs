@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.Security.Claims;
 using Bulky.DataAccess.Repository.IRepository;
 using Bulky.Models;
+using Bulky.Models.ViewModels;
 using Bulky.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -29,15 +30,23 @@ namespace Bulky.Areas.Customer.Controllers
 
         public IActionResult Details(int productId)
         {
-            ShoppingCart cart = new()
+            /*ShoppingCart cart = new()
             {
                 Product = _unitOfWork.Product.Get(u => u.Id == productId, includeProperties: "Category"),
                 ProductId = productId,
                 Count = 1
             };
-
+            */
+            ProductDetailVM productDetailVM = new()
+            {
+                Product = _unitOfWork.Product.Get(u => u.Id == productId, includeProperties: "Category"),
+                ProductId = productId,
+                Count = 1,
+                Reviews = _unitOfWork.Review.GetAll(u => u.ProductId == productId, includeProperties: "ApplicationUser")
+            };
             //Product product = _unitOfWork.Product.Get(u => u.Id == productId, includeProperties: "Category");
-            return View(cart);
+            //return View(cart);
+            return View(productDetailVM);
         }
         [HttpPost]
         [Authorize]
@@ -70,6 +79,26 @@ namespace Bulky.Areas.Customer.Controllers
             //_unitOfWork.Save();
 
             TempData["success"] = "Cart updated successfully";
+            return RedirectToAction(nameof(Index));
+        }
+        [HttpPost]
+        public IActionResult Review(ProductDetailVM productDetailVM)
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+            if (ModelState.IsValid)
+            {
+                Review review = new()
+                {
+                    ApplicationUserId = userId,
+                    ProductId = productDetailVM.ProductId,
+                    ReviewComment = productDetailVM.Comment,
+                    ReviewRate = productDetailVM.Rating
+                };
+                _unitOfWork.Review.Add(review);
+                _unitOfWork.Save();
+            }
+            //return View(productDetailVM);
             return RedirectToAction(nameof(Index));
         }
         public IActionResult Privacy()

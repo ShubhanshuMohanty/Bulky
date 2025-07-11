@@ -19,6 +19,7 @@ namespace Bulky.DataAccess.Data
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<OrderHeader> OrderHeaders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
+        public DbSet<Review> Reviews { get; set; }
 
         //data insert kar raha hu or onModelCreating method ko override kar raha hu 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

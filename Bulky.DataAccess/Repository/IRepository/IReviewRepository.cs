@@ -7,8 +7,9 @@ using Bulky.Models;
 
 namespace Bulky.DataAccess.Repository.IRepository
 {
-    public interface ICompanyRepository : IRepository<Company>
+    public interface IReviewRepository : IRepository<Review>
     {
-        void Update(Company obj);
+        void Update(Review obj);
+        
     }
 }
