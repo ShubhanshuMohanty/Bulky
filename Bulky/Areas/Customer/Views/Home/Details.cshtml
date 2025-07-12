@@ -1,14 +1,14 @@
 ﻿@model ProductDetailVM
 <style>
     .fa-star {
-        font-size: 20px;
-        color: gray;
-        cursor: pointer;
+    font-size: 20px;
+    color: gray;
+    cursor: pointer;
     }
 
-        .fa-star.checked {
-            color: gold;
-        }
+    .fa-star.checked {
+    color: gold;
+    }
 </style>
 
 <form method="post">
@@ -86,11 +86,11 @@
                             <div class="col-md-4">
                                 <div class="input-group mb-3">
                                     <span class="input-group-text bg-primary text-white border-0 fw-semibold"
-                                          id="inputGroup-sizing-default">
+                                    id="inputGroup-sizing-default">
                                         Count
                                     </span>
                                     <input asp-for="Count" type="number" value="1" class="form-control text-end"
-                                           aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" />
+                                    aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" />
 
                                 </div>
                             </div>
@@ -98,7 +98,7 @@
                         <div class="row">
                             <div class="col-12 col-md-6 pb-1">
                                 <button type="submit"
-                                        class="btn btn-primary bg-gradient  w-100 py-2 text-uppercase fw-semibold">
+                                class="btn btn-primary bg-gradient  w-100 py-2 text-uppercase fw-semibold">
                                     Add to Cart 
                                 </button>
                             </div>
@@ -133,13 +133,47 @@
 
         <div class="col-12 col-md-6 pb-1">
             <button type="submit" 
-                    class="btn btn-outline-success w-100 py-2 text-uppercase fw-semibold">
+            class="btn btn-outline-success w-100 py-2 text-uppercase fw-semibold">
                 Submit Review
             </button>
         </div>
     </div>
 </form>
+<!-- Comments List -->
+@if (Model.Reviews != null)
+{
+    <div id="commentsList">
+        <h4 class="mb-4 text-info">All Reviews</h4>
+        @foreach(var cmt in Model.Reviews)
+        {
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div class="d-flex align-items-center">
+                            <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center fw-bold me-3" style="width: 40px; height: 40px;">
+                                @cmt.ApplicationUser.Name[0]
+                            </div>
+                            <div>
+                                <h6 class="mb-0">@cmt.ApplicationUser.Name</h6>
+                                <small class="text-muted">@(DateTime.ParseExact(cmt.CreatedDate.ToString(), "dd-MM-yyyy HH:mm:ss", null).ToString("MMMM dd, yyyy"))</small>
+                            </div>
+                        </div>
+                        <div class="text-warning">
+                            @{
 
+                                var ss = new string('★', cmt.ReviewRate);
+                            }
+                            @ss
+                        </div>
+                    </div>
+                    <p class="text-muted mb-0">
+                        @cmt.ReviewComment
+                    </p>
+                </div>
+            </div>
+        }
+    </div>
+}
 @section Scripts {
     <script>
         document.addEventListener("DOMContentLoaded", function () {
